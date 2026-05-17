@@ -144,8 +144,10 @@ class Neo4jClient:
             **kwargs
         }
         
+        # Always add to NetworkX graph for local algorithms (PageRank/Louvain)
+        self.nx_graph.add_node(path, **properties)
+        
         if self.fallback_mode:
-            self.nx_graph.add_node(path, **properties)
             return path
         
         with self.driver.session() as session:
@@ -158,7 +160,7 @@ class Neo4jClient:
                     complexity: $complexity,
                     type: 'file'
                 })
-                RETURN elementId(f) as id
+                RETURN id(f) as id
                 """,
                 **properties
             )
@@ -190,8 +192,10 @@ class Neo4jClient:
         
         node_id = f"{file_path}::{name}"
         
+        # Always add to NetworkX graph
+        self.nx_graph.add_node(node_id, **properties)
+        
         if self.fallback_mode:
-            self.nx_graph.add_node(node_id, **properties)
             return node_id
         
         with self.driver.session() as session:
@@ -204,7 +208,7 @@ class Neo4jClient:
                     params: $params,
                     type: 'function'
                 })
-                RETURN elementId(f) as id
+                RETURN id(f) as id
                 """,
                 **properties
             )
@@ -234,8 +238,10 @@ class Neo4jClient:
         
         node_id = f"{file_path}::{name}"
         
+        # Always add to NetworkX graph
+        self.nx_graph.add_node(node_id, **properties)
+        
         if self.fallback_mode:
-            self.nx_graph.add_node(node_id, **properties)
             return node_id
         
         with self.driver.session() as session:
@@ -247,7 +253,7 @@ class Neo4jClient:
                     methods_count: $methods_count,
                     type: 'class'
                 })
-                RETURN elementId(c) as id
+                RETURN id(c) as id
                 """,
                 **properties
             )
@@ -272,8 +278,10 @@ class Neo4jClient:
             **kwargs
         }
         
+        # Always add to NetworkX graph
+        self.nx_graph.add_node(name, **properties)
+        
         if self.fallback_mode:
-            self.nx_graph.add_node(name, **properties)
             return name
         
         with self.driver.session() as session:
@@ -284,7 +292,7 @@ class Neo4jClient:
                     description: $description,
                     type: 'module'
                 })
-                RETURN elementId(m) as id
+                RETURN id(m) as id
                 """,
                 **properties
             )
@@ -303,9 +311,11 @@ class Neo4jClient:
         """
         if properties is None:
             properties = {}
+            
+        # Always add to NetworkX graph
+        self.nx_graph.add_edge(source, target, type=rel_type, **properties)
         
         if self.fallback_mode:
-            self.nx_graph.add_edge(source, target, type=rel_type, **properties)
             return
         
         with self.driver.session() as session:
@@ -313,8 +323,8 @@ class Neo4jClient:
             session.run(
                 f"""
                 MATCH (s:CodeElement), (t:CodeElement)
-                WHERE s.path = $source OR s.name = $source OR elementId(s) = $source
-                AND t.path = $target OR t.name = $target OR elementId(t) = $target
+                WHERE s.path = $source OR s.name = $source OR id(s) = $source
+                AND t.path = $target OR t.name = $target OR id(t) = $target
                 CREATE (s)-[r:{rel_type}]->(t)
                 SET r += $properties
                 """,
