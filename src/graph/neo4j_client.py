@@ -333,44 +333,21 @@ class Neo4jClient:
         Returns:
             List of files with their PageRank scores
         """
-        if self.fallback_mode:
-            if len(self.nx_graph.nodes()) == 0:
-                return []
-            
-            pagerank = nx.pagerank(self.nx_graph)
-            sorted_nodes = sorted(pagerank.items(), key=lambda x: x[1], reverse=True)
-            
-            return [
-                {
-                    'node': node,
-                    'score': score,
-                    'properties': self.nx_graph.nodes[node]
-                }
-                for node, score in sorted_nodes[:top_n]
-            ]
+        # Force NetworkX for PageRank to avoid GDS/Aura Free compatibility issues
+        if len(self.nx_graph.nodes()) == 0:
+            return []
         
-        with self.driver.session() as session:
-            result = session.run(
-                """
-                CALL gds.pageRank.stream({
-                    nodeProjection: 'CodeElement',
-                    relationshipProjection: {
-                        IMPORTS: {type: 'IMPORTS'},
-                        CALLS: {type: 'CALLS'},
-                        DEPENDS_ON: {type: 'DEPENDS_ON'}
-                    }
-                })
-                YIELD nodeId, score
-                MATCH (n:CodeElement)
-                WHERE elementId(n) = nodeId
-                RETURN n.path as path, n.name as name, n.type as type, score
-                ORDER BY score DESC
-                LIMIT $top_n
-                """,
-                top_n=top_n
-            )
-            
-            return [dict(record) for record in result]
+        pagerank = nx.pagerank(self.nx_graph)
+        sorted_nodes = sorted(pagerank.items(), key=lambda x: x[1], reverse=True)
+        
+        return [
+            {
+                'node': node,
+                'score': score,
+                'properties': self.nx_graph.nodes[node]
+            }
+            for node, score in sorted_nodes[:top_n]
+        ]
     
     def detect_communities(self) -> List[Dict[str, Any]]:
         """
@@ -379,40 +356,21 @@ class Neo4jClient:
         Returns:
             List of communities with their members
         """
-        if self.fallback_mode:
-            if len(self.nx_graph.nodes()) == 0:
-                return []
-            
-            # Use Louvain community detection
-            communities = nx.community.louvain_communities(self.nx_graph.to_undirected())
-            
-            return [
-                {
-                    'community_id': i,
-                    'members': list(community),
-                    'size': len(community)
-                }
-                for i, community in enumerate(communities)
-            ]
+        # Force NetworkX for Louvain to avoid GDS/Aura Free compatibility issues
+        if len(self.nx_graph.nodes()) == 0:
+            return []
         
-        with self.driver.session() as session:
-            result = session.run(
-                """
-                CALL gds.louvain.stream({
-                    nodeProjection: 'CodeElement',
-                    relationshipProjection: {
-                        IMPORTS: {type: 'IMPORTS', orientation: 'UNDIRECTED'},
-                        DEPENDS_ON: {type: 'DEPENDS_ON', orientation: 'UNDIRECTED'}
-                    }
-                })
-                YIELD nodeId, communityId
-                MATCH (n:CodeElement)
-                WHERE elementId(n) = nodeId
-                RETURN communityId, collect(n.path) as members, count(*) as size
-                ORDER BY size DESC
-                """)
-            
-            return [dict(record) for record in result]
+        # Use Louvain community detection
+        communities = nx.community.louvain_communities(self.nx_graph.to_undirected())
+        
+        return [
+            {
+                'community_id': i,
+                'members': list(community),
+                'size': len(community)
+            }
+            for i, community in enumerate(communities)
+        ]
     
     def find_impact_radius(self, file_path: str, depth: int = 3) -> List[str]:
         """
