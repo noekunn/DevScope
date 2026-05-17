@@ -504,11 +504,11 @@ def render_sidebar():
 
         # Custom navigation
         st.markdown("#### Navigation")
-        st.page_link("src/dashboard/app.py", label="🏠  Home", use_container_width=True)
-        st.page_link("src/dashboard/pages/01_codebase_xray.py", label="🔬  Codebase X-Ray", use_container_width=True)
-        st.page_link("src/dashboard/pages/02_onboarding_hub.py", label="📚  Onboarding Hub", use_container_width=True)
-        st.page_link("src/dashboard/pages/03_modernization.py", label="🔄  Modernization", use_container_width=True)
-        st.page_link("src/dashboard/pages/04_graph_explorer.py", label="🕸️  Graph Explorer", use_container_width=True)
+        st.page_link("app.py", label="🏠  Home", use_container_width=True)
+        st.page_link("pages/01_codebase_xray.py", label="🔬  Codebase X-Ray", use_container_width=True)
+        st.page_link("pages/02_onboarding_hub.py", label="📚  Onboarding Hub", use_container_width=True)
+        st.page_link("pages/03_modernization.py", label="🔄  Modernization", use_container_width=True)
+        st.page_link("pages/04_graph_explorer.py", label="🕸️  Graph Explorer", use_container_width=True)
 
         st.markdown("---")
         st.markdown("#### 📂 Repository")
@@ -642,7 +642,7 @@ def render_main_area():
                 <p>Visualize dependencies, complexity hotspots, and tech stack.</p>
             </div>
             """, unsafe_allow_html=True)
-            st.page_link("src/dashboard/pages/01_codebase_xray.py", label="→ Go to Codebase X-Ray", use_container_width=True)
+            st.page_link("pages/01_codebase_xray.py", label="→ Go to Codebase X-Ray", use_container_width=True)
 
             st.markdown("""
             <div class="wcard">
@@ -650,7 +650,7 @@ def render_main_area():
                 <p>AI-detected refactoring opportunities and technical debt roadmap.</p>
             </div>
             """, unsafe_allow_html=True)
-            st.page_link("src/dashboard/pages/03_modernization.py", label="→ Go to Modernization", use_container_width=True)
+            st.page_link("pages/03_modernization.py", label="→ Go to Modernization", use_container_width=True)
         with col2:
             st.markdown("""
             <div class="wcard">
@@ -658,7 +658,7 @@ def render_main_area():
                 <p>Role-specific guides and learning paths for new developers.</p>
             </div>
             """, unsafe_allow_html=True)
-            st.page_link("src/dashboard/pages/02_onboarding_hub.py", label="→ Go to Onboarding Hub", use_container_width=True)
+            st.page_link("pages/02_onboarding_hub.py", label="→ Go to Onboarding Hub", use_container_width=True)
 
             st.markdown("""
             <div class="wcard">
@@ -666,7 +666,7 @@ def render_main_area():
                 <p>Interactive knowledge graph with PageRank and community detection.</p>
             </div>
             """, unsafe_allow_html=True)
-            st.page_link("src/dashboard/pages/04_graph_explorer.py", label="→ Go to Graph Explorer", use_container_width=True)
+            st.page_link("pages/04_graph_explorer.py", label="→ Go to Graph Explorer", use_container_width=True)
 
         st.markdown("---")
 
