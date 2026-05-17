@@ -54,6 +54,61 @@ st.markdown("""
         color: #1c1917 !important;
     }
 
+    /* Hide ugly default page nav */
+    [data-testid="stSidebarNav"] {
+        display: none !important;
+    }
+
+    /* Custom sidebar nav links */
+    .sidebar-nav { margin: 0.5rem 0; }
+    .sidebar-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.7rem 1rem;
+        border-radius: 12px;
+        margin: 0.25rem 0;
+        color: #57534e !important;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        text-decoration: none !important;
+    }
+    .sidebar-nav-item:hover {
+        background: linear-gradient(135deg, #fdf2f8, #fff7ed);
+        color: #1c1917 !important;
+    }
+    .sidebar-nav-item.active {
+        background: linear-gradient(135deg, #fdf2f8, #fff7ed);
+        color: #ec4899 !important;
+        font-weight: 600;
+        border: 1px solid #fce7f3;
+    }
+    .sidebar-nav-icon {
+        font-size: 1.1rem;
+        width: 1.5rem;
+        text-align: center;
+    }
+
+    /* Style page_link buttons to look like nav items */
+    [data-testid="stSidebar"] .stPageLink > a {
+        background: transparent !important;
+        border: none !important;
+        padding: 0.7rem 1rem !important;
+        border-radius: 12px !important;
+        font-weight: 500 !important;
+        font-size: 0.95rem !important;
+        color: #57534e !important;
+        text-decoration: none !important;
+        display: block;
+        transition: all 0.2s ease;
+    }
+    [data-testid="stSidebar"] .stPageLink > a:hover {
+        background: linear-gradient(135deg, #fdf2f8, #fff7ed) !important;
+        color: #1c1917 !important;
+    }
+
     /* All text dark */
     .stMarkdown, .stMarkdown p, .stMarkdown li, label, .stTextInput label {
         color: #1c1917 !important;
@@ -137,6 +192,26 @@ st.markdown("""
         font-size: 0.9rem;
         margin-top: 1rem;
         display: inline-block;
+    }
+
+    /* Style page_link buttons in main area to look like card links */
+    .main .stPageLink > a {
+        background: transparent !important;
+        border: 1px solid #fce7f3 !important;
+        border-radius: 12px !important;
+        color: #ec4899 !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        padding: 0.6rem 1.2rem !important;
+        margin-bottom: 1rem !important;
+        transition: all 0.3s ease !important;
+    }
+    .main .stPageLink > a:hover {
+        background: linear-gradient(135deg, #ec4899, #f97316) !important;
+        color: white !important;
+        border-color: transparent !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(236,72,153,0.3) !important;
     }
 
     /* Feature chips */
@@ -427,8 +502,16 @@ def render_sidebar():
         </div>
         """, unsafe_allow_html=True)
 
+        # Custom navigation
+        st.markdown("#### Navigation")
+        st.page_link("src/dashboard/app.py", label="🏠  Home", use_container_width=True)
+        st.page_link("src/dashboard/pages/01_codebase_xray.py", label="🔬  Codebase X-Ray", use_container_width=True)
+        st.page_link("src/dashboard/pages/02_onboarding_hub.py", label="📚  Onboarding Hub", use_container_width=True)
+        st.page_link("src/dashboard/pages/03_modernization.py", label="🔄  Modernization", use_container_width=True)
+        st.page_link("src/dashboard/pages/04_graph_explorer.py", label="🕸️  Graph Explorer", use_container_width=True)
+
         st.markdown("---")
-        st.markdown("### 📂 Repository")
+        st.markdown("#### 📂 Repository")
         repo_input = st.text_input(
             "Enter repository path or GitHub URL",
             placeholder="/path/to/repo or https://github.com/user/repo",
@@ -448,7 +531,7 @@ def render_sidebar():
         st.markdown("---")
 
         if st.session_state.analyzed:
-            st.markdown("### 💚 Codebase Health")
+            st.markdown("#### 💚 Codebase Health")
             score = st.session_state.health_score
             if score >= 75:
                 cls = "green"
@@ -471,7 +554,7 @@ def render_sidebar():
             graph_summary = st.session_state.get('graph_summary', {})
             enrichment_summary = st.session_state.get('enrichment_summary', {})
             if results:
-                st.markdown("### 📊 Quick Stats")
+                st.markdown("#### 📊 Quick Stats")
                 col1, col2 = st.columns(2)
                 with col1:
                     st.metric("Files", graph_summary.get('files_analyzed', 0))
@@ -557,31 +640,33 @@ def render_main_area():
             <div class="wcard">
                 <h3>🔬 Codebase X-Ray</h3>
                 <p>Visualize dependencies, complexity hotspots, and tech stack.</p>
-                <span class="wcard-link">→ Go to page</span>
             </div>
             """, unsafe_allow_html=True)
+            st.page_link("src/dashboard/pages/01_codebase_xray.py", label="→ Go to Codebase X-Ray", use_container_width=True)
+
             st.markdown("""
             <div class="wcard">
                 <h3>🔄 Modernization</h3>
                 <p>AI-detected refactoring opportunities and technical debt roadmap.</p>
-                <span class="wcard-link">→ Go to page</span>
             </div>
             """, unsafe_allow_html=True)
+            st.page_link("src/dashboard/pages/03_modernization.py", label="→ Go to Modernization", use_container_width=True)
         with col2:
             st.markdown("""
             <div class="wcard">
                 <h3>📚 Onboarding Hub</h3>
                 <p>Role-specific guides and learning paths for new developers.</p>
-                <span class="wcard-link">→ Go to page</span>
             </div>
             """, unsafe_allow_html=True)
+            st.page_link("src/dashboard/pages/02_onboarding_hub.py", label="→ Go to Onboarding Hub", use_container_width=True)
+
             st.markdown("""
             <div class="wcard">
                 <h3>🕸️ Graph Explorer</h3>
                 <p>Interactive knowledge graph with PageRank and community detection.</p>
-                <span class="wcard-link">→ Go to page</span>
             </div>
             """, unsafe_allow_html=True)
+            st.page_link("src/dashboard/pages/04_graph_explorer.py", label="→ Go to Graph Explorer", use_container_width=True)
 
         st.markdown("---")
 
