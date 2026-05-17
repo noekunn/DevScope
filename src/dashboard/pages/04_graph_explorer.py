@@ -126,24 +126,29 @@ def create_pyvis_graph(nodes, edges, highlight_mode, selected_file=None,
         directed=True
     )
     
-    # Configure physics
+    # Configure physics for better stability
     net.set_options("""
     {
         "physics": {
-            "enabled": true,
-            "barnesHut": {
-                "gravitationalConstant": -8000,
-                "centralGravity": 0.3,
-                "springLength": 95,
-                "springConstant": 0.04
+            "solver": "forceAtlas2Based",
+            "forceAtlas2Based": {
+                "gravitationalConstant": -100,
+                "springLength": 100,
+                "springConstant": 0.05,
+                "damping": 0.9,
+                "avoidOverlap": 0.1
             },
             "stabilization": {
-                "iterations": 150
+                "enabled": true,
+                "iterations": 500,
+                "fit": true
             }
         },
         "interaction": {
             "hover": true,
-            "tooltipDelay": 100
+            "tooltipDelay": 100,
+            "zoomView": true,
+            "dragView": true
         }
     }
     """)
