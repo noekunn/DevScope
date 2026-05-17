@@ -66,7 +66,7 @@ def get_graph_data():
             # Get nodes
             node_result = session.run("""
                 MATCH (n:CodeElement)
-                RETURN elementId(n) as id, 
+                RETURN id(n) as id, 
                        n.path as path,
                        n.name as name,
                        n.type as type,
@@ -95,8 +95,8 @@ def get_graph_data():
             # Get edges
             edge_result = session.run("""
                 MATCH (n:CodeElement)-[r]->(m:CodeElement)
-                RETURN elementId(n) as from,
-                       elementId(m) as to,
+                RETURN id(n) as from,
+                       id(m) as to,
                        type(r) as rel_type
                 LIMIT 1000
             """)

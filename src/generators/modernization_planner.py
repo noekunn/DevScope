@@ -174,9 +174,9 @@ class ModernizationPlanner:
             with self.neo4j_client.driver.session() as session:
                 result = session.run(
                     """
-                    MATCH (f:File)
+                    MATCH (f:CodeElement:File)
                     WHERE f.type = 'file' 
-                    AND NOT (f)-[:TESTED_BY]->(:File)
+                    AND NOT (f)-[:TESTED_BY]->(:CodeElement:File)
                     AND f.complexity > 5
                     RETURN f.path as file,
                            f.complexity as complexity,
@@ -221,12 +221,12 @@ class ModernizationPlanner:
             with self.neo4j_client.driver.session() as session:
                 result = session.run(
                     """
-                    MATCH (f:File)
+                    MATCH (f:CodeElement:File)
                     WHERE f.complexity > 8
                     RETURN f.path as file,
                            f.complexity as complexity
                     ORDER BY f.complexity DESC
-                    LIMIT 5
+                    LIMIT 2
                     """
                 )
                 
