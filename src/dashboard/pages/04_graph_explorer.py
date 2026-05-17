@@ -23,28 +23,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS matching main app
-st.markdown("""
-<style>
-    .stApp {
-        background: linear-gradient(135deg, #0a0f1c 0%, #111827 50%, #1a1f35 100%);
-    }
-    
-    .metric-card {
-        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin: 1rem 0;
-    }
-    
-    h1, h2, h3 {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-</style>
-""", unsafe_allow_html=True)
+# Apply shared warm theme
+from src.dashboard.components.theme import inject_theme
+inject_theme()
 
 # Initialize Neo4j client
 @st.cache_resource
@@ -139,8 +120,8 @@ def create_pyvis_graph(nodes, edges, highlight_mode, selected_file=None,
     net = Network(
         height="700px",
         width="100%",
-        bgcolor="#0a0f1c",
-        font_color="#f9fafb",
+        bgcolor="#f5f4ef",
+        font_color="#1c1917",
         directed=True
     )
     
@@ -218,7 +199,7 @@ def create_pyvis_graph(nodes, edges, highlight_mode, selected_file=None,
         node_ids.add(node_id)
         
         # Determine color based on highlight mode
-        color = "#6366f1"  # Default indigo
+        color = "#ec4899"  # Default pink
         size = 20
         
         if highlight_mode == "Critical Path":
