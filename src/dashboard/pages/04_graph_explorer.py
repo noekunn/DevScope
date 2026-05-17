@@ -24,8 +24,9 @@ st.set_page_config(
 )
 
 # Apply shared warm theme
-from src.dashboard.components.theme import inject_theme
+from src.dashboard.components.theme import inject_theme, render_shared_sidebar
 inject_theme()
+render_shared_sidebar()
 
 # Initialize Neo4j client
 @st.cache_resource

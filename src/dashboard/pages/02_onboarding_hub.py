@@ -14,8 +14,9 @@ from typing import Optional
 
 st.set_page_config(page_title="Onboarding Hub - DevScope", page_icon="📚", layout="wide")
 
-from src.dashboard.components.theme import inject_theme
+from src.dashboard.components.theme import inject_theme, render_shared_sidebar
 inject_theme()
+render_shared_sidebar()
 
 st.markdown("""
 <style>

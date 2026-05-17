@@ -1,5 +1,5 @@
 """
-Shared warm theme CSS for all DevScope pages.
+Shared warm theme CSS and sidebar navigation for all DevScope pages.
 Inspired by weco.ai — cream background, pink-orange accents, white cards.
 """
 
@@ -16,6 +16,29 @@ WARM_THEME_CSS = """
         border-right: 1px solid #e8e5df;
     }
     [data-testid="stSidebar"] * { color: #1c1917 !important; }
+
+    /* Hide ugly default page nav on ALL pages */
+    [data-testid="stSidebarNav"] {
+        display: none !important;
+    }
+
+    /* Style page_link buttons in sidebar */
+    [data-testid="stSidebar"] .stPageLink > a {
+        background: transparent !important;
+        border: none !important;
+        padding: 0.7rem 1rem !important;
+        border-radius: 12px !important;
+        font-weight: 500 !important;
+        font-size: 0.95rem !important;
+        color: #57534e !important;
+        text-decoration: none !important;
+        display: block;
+        transition: all 0.2s ease;
+    }
+    [data-testid="stSidebar"] .stPageLink > a:hover {
+        background: linear-gradient(135deg, #fdf2f8, #fff7ed) !important;
+        color: #1c1917 !important;
+    }
 
     .stMarkdown, .stMarkdown p, .stMarkdown li, label { color: #1c1917 !important; }
     h1, h2, h3, h4, h5, h6 {
@@ -186,3 +209,25 @@ def inject_theme():
     """Inject the warm theme CSS into a Streamlit page."""
     import streamlit as st
     st.markdown(WARM_THEME_CSS, unsafe_allow_html=True)
+
+
+def render_shared_sidebar():
+    """Render the shared sidebar navigation on sub-pages."""
+    import streamlit as st
+
+    with st.sidebar:
+        st.markdown("""
+        <div style="text-align:center;padding:1.5rem 1rem;margin-bottom:1rem;background:linear-gradient(135deg,#fdf2f8,#fff7ed);border-radius:16px;border:1px solid #fce7f3;">
+            <div style="font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#ec4899,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🔍 DevScope</div>
+            <div style="color:#78716c !important;font-size:0.85rem;margin-top:0.25rem;">Intelligent Codebase Onboarding</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("#### Navigation")
+        st.page_link("app.py", label="🏠  Home", use_container_width=True)
+        st.page_link("pages/01_codebase_xray.py", label="🔬  Codebase X-Ray", use_container_width=True)
+        st.page_link("pages/02_onboarding_hub.py", label="📚  Onboarding Hub", use_container_width=True)
+        st.page_link("pages/03_modernization.py", label="🔄  Modernization", use_container_width=True)
+        st.page_link("pages/04_graph_explorer.py", label="🕸️  Graph Explorer", use_container_width=True)
+
+        st.markdown("---")

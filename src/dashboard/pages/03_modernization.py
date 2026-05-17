@@ -14,8 +14,9 @@ from typing import Dict, List, Any
 
 st.set_page_config(page_title="Modernization - DevScope", page_icon="🔄", layout="wide")
 
-from src.dashboard.components.theme import inject_theme
+from src.dashboard.components.theme import inject_theme, render_shared_sidebar
 inject_theme()
+render_shared_sidebar()
 
 
 def parse_roadmap_issues(roadmap_text: str) -> Dict[str, List[Dict[str, Any]]]:

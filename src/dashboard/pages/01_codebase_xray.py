@@ -30,8 +30,9 @@ st.set_page_config(
 )
 
 # Apply shared warm theme
-from src.dashboard.components.theme import inject_theme
+from src.dashboard.components.theme import inject_theme, render_shared_sidebar
 inject_theme()
+render_shared_sidebar()
 
 # Page-specific styles
 st.markdown("""
